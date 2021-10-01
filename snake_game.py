@@ -8,17 +8,17 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
-SQUARE_SIZE = 18  # This sets the size of each square in the grid
-GRID_SIZE = 40  # Set grid size (n * n squares)
+SQUARE_SIZE = 20  # This sets the size of each square in the grid
+GRID_SIZE = 30  # Set grid size (n * n squares)
 MARGIN = 1
 
 SIZE = MARGIN*2 + (GRID_SIZE*SQUARE_SIZE+MARGIN*GRID_SIZE)
 
 
 # Set up snake position
-head_loc = [10, 10]
+head_loc = [20, 20]
 head_dir = 'up'
-tail_loc = [13, 10]
+tail_loc = [23, 20]
 tail_dir = ['up', 'up', 'up']
 
 speed = 5  # Snake move speed. Lower number is quicker
@@ -84,7 +84,7 @@ def set_dir(direction):
 
 def check_collision():
     global done
-    if(head_loc[0] <= 0 or head_loc[1] <= 0 or head_loc[0] >= GRID_SIZE-1 or head_loc[1] >= GRID_SIZE-1):
+    if head_loc[0] <= 0 or head_loc[1] <= 0 or head_loc[0] >= GRID_SIZE-1 or head_loc[1] >= GRID_SIZE-1:
         print("COLLISION")
         done = True
     return
@@ -98,22 +98,22 @@ while not done:
 
             if event.key == pygame.K_ESCAPE:  # Quit if ESC key pressed
                 done = True
-            elif event.key == pygame.K_w:
+            elif event.key == pygame.K_w or event.key == pygame.K_UP:
                 if(head_dir != 'up' and head_dir != 'down'):
                     grid[head_loc[0] - 1][head_loc[1]] = 1
                     set_dir('up')
                     head_loc[0] -= 1
-            elif event.key == pygame.K_d:
+            elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                 if(head_dir != 'right' and head_dir != 'left'):
                     grid[head_loc[0]][head_loc[1] + 1] = 1
                     set_dir('right')
                     head_loc[1] += 1
-            elif event.key == pygame.K_s:
+            elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
                 if(head_dir != 'down' and head_dir != 'up'):
                     grid[head_loc[0] + 1][head_loc[1]] = 1
                     set_dir('down')
                     head_loc[0] += 1
-            elif event.key == pygame.K_a:
+            elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
                 if(head_dir != 'left' and head_dir != 'right'):
                     grid[head_loc[0]][head_loc[1] - 1] = 1
                     set_dir('left')
@@ -170,9 +170,8 @@ while not done:
     # Limit to 60 frames per second
     clock.tick(60)
 
-    # Go ahead and update the screen with what we've drawn.
+    # Update the screen with what we've drawn.
     pygame.display.flip()
 
-# Be IDLE friendly. If you forget this line, the program will 'hang'
-# on exit.
+
 pygame.quit()
