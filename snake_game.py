@@ -15,11 +15,11 @@ MARGIN = 1
 SIZE = MARGIN*2 + (GRID_SIZE*SQUARE_SIZE+MARGIN*GRID_SIZE)
 
 
-# Set up snake position
-head_loc = [20, 20]
-head_dir = 'up'
-tail_loc = [23, 20]
-tail_dir = ['up', 'up', 'up']
+# Set up starting snake position
+head_loc = [13, 15]
+head_dir = ''
+tail_loc = [head_loc[0] + 6, head_loc[1]]
+tail_dir = ['up', 'up', 'up', 'up', 'up', 'up']
 
 speed = 5  # Snake move speed. Lower number is quicker
 move_clock = 0  # Used to move snake at certain speed
@@ -32,7 +32,10 @@ for row in range(GRID_SIZE):
     # in this row
     grid.append([])
     for column in range(GRID_SIZE):
-        grid[row].append(0)  # Append a cell
+        if column == 0 or column == GRID_SIZE - 1 or row == 0 or row == GRID_SIZE - 1:
+            grid[row].append(1)  # Append a cell
+        else:
+            grid[row].append(0)  # Append a cell
 
 # Initialize pygame
 pygame.init()
@@ -55,6 +58,9 @@ clock = pygame.time.Clock()
 grid[head_loc[0]][head_loc[1]] = 1
 grid[head_loc[0]+1][head_loc[1]] = 1
 grid[head_loc[0]+2][head_loc[1]] = 1
+grid[head_loc[0]+3][head_loc[1]] = 1
+grid[head_loc[0]+4][head_loc[1]] = 1
+grid[head_loc[0]+5][head_loc[1]] = 1
 grid[tail_loc[0]][tail_loc[1]] = 1
 
 
@@ -73,22 +79,6 @@ def move_tail():
     return
 
 
-def set_dir(direction):
-    global head_dir
-    global move_clock
-    head_dir = direction
-    move_tail()
-    tail_dir.insert(0, direction)
-    move_clock = 0
-    return
-
-def check_collision():
-    global done
-    if head_loc[0] <= 0 or head_loc[1] <= 0 or head_loc[0] >= GRID_SIZE-1 or head_loc[1] >= GRID_SIZE-1:
-        print("COLLISION")
-        done = True
-    return
-
 # -------- Main Program Loop -----------
 while not done:
     for event in pygame.event.get():  # User did something
@@ -100,56 +90,71 @@ while not done:
                 done = True
             elif event.key == pygame.K_w or event.key == pygame.K_UP:
                 if(head_dir != 'up' and head_dir != 'down'):
-                    grid[head_loc[0] - 1][head_loc[1]] = 1
-                    set_dir('up')
-                    head_loc[0] -= 1
+                    head_dir = 'up'
+                    move_clock = speed
             elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                 if(head_dir != 'right' and head_dir != 'left'):
-                    grid[head_loc[0]][head_loc[1] + 1] = 1
-                    set_dir('right')
-                    head_loc[1] += 1
+                    head_dir = 'right'
+                    move_clock = speed
             elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
-                if(head_dir != 'down' and head_dir != 'up'):
-                    grid[head_loc[0] + 1][head_loc[1]] = 1
-                    set_dir('down')
-                    head_loc[0] += 1
+                if(head_dir != 'down' and head_dir != 'up' and head_dir != ''):
+                    head_dir = 'down'
+                    move_clock = speed
             elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
                 if(head_dir != 'left' and head_dir != 'right'):
-                    grid[head_loc[0]][head_loc[1] - 1] = 1
-                    set_dir('left')
-                    head_loc[1] -= 1
+                    head_dir = 'left'
+                    move_clock = speed
 
-    check_collision()
+
     if move_clock < speed:
         move_clock += 1
     else:
         if(head_dir == 'left'):
-            grid[head_loc[0]][head_loc[1] - 1] = 1
-            move_tail()
-            tail_dir.insert(0, 'left')
-            head_loc[1] -= 1
+            if grid[head_loc[0]][head_loc[1] - 1] == 1:
+                print("OCUPPIED SQUARE COLLISION")
+                done = True
+            else:
+                grid[head_loc[0]][head_loc[1] - 1] = 1
+                move_tail()
+                tail_dir.insert(0, 'left')
+                head_loc[1] -= 1
 
         elif(head_dir == 'down'):
-            grid[head_loc[0] + 1][head_loc[1]] = 1
-            move_tail()
-            tail_dir.insert(0, 'down')
-            head_loc[0] += 1
+            if grid[head_loc[0] + 1][head_loc[1]] == 1:
+                print("OCUPPIED SQUARE COLLISION")
+                done = True
+            else:
+                grid[head_loc[0] + 1][head_loc[1]] = 1
+                move_tail()
+                tail_dir.insert(0, 'down')
+                head_loc[0] += 1
 
         elif(head_dir == 'right'):
-            grid[head_loc[0]][head_loc[1] + 1] = 1
-            head_dir = 'right'
-            move_tail()
-            tail_dir.insert(0, 'right')
-            head_loc[1] += 1
+            if grid[head_loc[0]][head_loc[1] + 1] == 1:
+                print("OCUPPIED SQUARE COLLISION")
+                done = True
+            else:
+                grid[head_loc[0]][head_loc[1] + 1] = 1
+                head_dir = 'right'
+                move_tail()
+                tail_dir.insert(0, 'right')
+                head_loc[1] += 1
 
         elif(head_dir == 'up'):
-            grid[head_loc[0] - 1][head_loc[1]] = 1
-            head_dir = 'up'
-            move_tail()
-            tail_dir.insert(0, 'up')
-            head_loc[0] -= 1
+            if grid[head_loc[0] - 1][head_loc[1]] == 1:
+                print("OCUPPIED SQUARE COLLISION")
+                done = True
+            else:
+                grid[head_loc[0] - 1][head_loc[1]] = 1
+                head_dir = 'up'
+                move_tail()
+                tail_dir.insert(0, 'up')
+                head_loc[0] -= 1
 
         move_clock = 0
+
+    # Check for collision
+
     # Set the screen background
     screen.fill(WHITE)
 
