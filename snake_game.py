@@ -13,18 +13,20 @@ SQUARE_SIZE = 20  # This sets the size of each square in the grid
 GRID_SIZE = 30  # Set grid size (n * n squares)
 MARGIN = 1
 
-SIZE = MARGIN*2 + (GRID_SIZE*SQUARE_SIZE+MARGIN*GRID_SIZE)
-WINDOW_SIZE = [SIZE, SIZE]
+WINDOW_SIZE_SIDE = MARGIN*2 + (GRID_SIZE*SQUARE_SIZE+MARGIN*GRID_SIZE)
+WINDOW_SIZE = [WINDOW_SIZE_SIDE, WINDOW_SIZE_SIDE]
 
 
 # Set up starting snake position
 head_loc = [13, 15]
 head_dir = ''
-tail_loc = [head_loc[0] + 6, head_loc[1]]
-tail_dir = ['up', 'up', 'up', 'up', 'up', 'up']
+tail_loc = [head_loc[0] + 4, head_loc[1]]
+tail_dir = ['up', 'up', 'up', 'up']
 
 speed = 150  # Snake move speed. Lower number is quicker
 move_clock = 0  # Used to move snake at certain speed
+
+move_queue = '' # This being used to queue the next move
 
 # Create a 2 dimensional array for our playing grid
 grid = []
@@ -58,8 +60,6 @@ grid[head_loc[0]][head_loc[1]] = 1
 grid[head_loc[0]+1][head_loc[1]] = 1
 grid[head_loc[0]+2][head_loc[1]] = 1
 grid[head_loc[0]+3][head_loc[1]] = 1
-grid[head_loc[0]+4][head_loc[1]] = 1
-grid[head_loc[0]+5][head_loc[1]] = 1
 grid[tail_loc[0]][tail_loc[1]] = 1
 
 
@@ -112,26 +112,25 @@ while not done:
                 done = True
             elif event.key == pygame.K_w or event.key == pygame.K_UP:
                 if(head_dir != 'up' and head_dir != 'down'):
-                    head_dir = 'up'
-                    move_clock = speed
+                    move_queue = 'up'
             elif event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                 if(head_dir != 'right' and head_dir != 'left'):
-                    head_dir = 'right'
-                    move_clock = speed
+                    move_queue = 'right'
             elif event.key == pygame.K_s or event.key == pygame.K_DOWN:
                 if(head_dir != 'down' and head_dir != 'up' and head_dir != ''):
-                    head_dir = 'down'
-                    move_clock = speed
+                    move_queue = 'down'
             elif event.key == pygame.K_a or event.key == pygame.K_LEFT:
                 if(head_dir != 'left' and head_dir != 'right'):
-                    head_dir = 'left'
-                    move_clock = speed
+                    move_queue = 'left'
 
     # Checks if it's time to move the snake
     # Depending on speed
     if move_clock < speed / 10:
         move_clock += 1
     else:
+        if move_queue != head_dir:
+            # Make queued move the new direction
+            head_dir = move_queue
         if(head_dir == 'left'):
             if grid[head_loc[0]][head_loc[1] - 1] != 0: # Checks for collision
                 if grid[head_loc[0]][head_loc[1] - 1] == 2: # if collision is food makes snake bigger
