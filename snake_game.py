@@ -209,7 +209,7 @@ while not done:
         move_clock = 0  # Reset move clock / snake speed
 
     # Set the screen background
-    screen.fill(GREY)
+    screen.fill(WHITE)
 
     # Draw the grid
     for row in range(GRID_SIZE):
