@@ -100,6 +100,8 @@ def generate_food():
     return
 
 generate_food() # Generates first food item
+generate_food() 
+generate_food() # Make it 3 foods
 
 # -------- Main Program Loop -----------
 while not done:
@@ -218,7 +220,11 @@ while not done:
             elif grid[row][column] == 2:
                 color = GREEN
             elif grid[row][column] == 3:
-                color = BLACK
+                if speed < 20:
+                    rand_colors = [BLUE, GREEN, RED]
+                    color = rand_colors[random.randint(0,2)]
+                else:
+                    color = BLACK
             else:
                 color = WHITE
             pygame.draw.rect(screen,
