@@ -3,7 +3,7 @@ import random
 
 # Define some colors
 BLACK = (0, 0, 0)
-GREY = (200, 200, 200)
+GREY = (150, 150, 150)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
@@ -56,11 +56,11 @@ clock = pygame.time.Clock()
 
 
 # Display head / tail locations on the grid
-grid[head_loc[0]][head_loc[1]] = 1
-grid[head_loc[0]+1][head_loc[1]] = 1
-grid[head_loc[0]+2][head_loc[1]] = 1
-grid[head_loc[0]+3][head_loc[1]] = 1
-grid[tail_loc[0]][tail_loc[1]] = 1
+grid[head_loc[0]][head_loc[1]] = 3
+grid[head_loc[0]+1][head_loc[1]] = 3
+grid[head_loc[0]+2][head_loc[1]] = 3
+grid[head_loc[0]+3][head_loc[1]] = 3
+grid[tail_loc[0]][tail_loc[1]] = 3
 
 
 def move_tail():
@@ -134,7 +134,7 @@ while not done:
         if(head_dir == 'left'):
             if grid[head_loc[0]][head_loc[1] - 1] != 0: # Checks for collision
                 if grid[head_loc[0]][head_loc[1] - 1] == 2: # if collision is food makes snake bigger
-                    grid[head_loc[0]][head_loc[1] - 1] = 1
+                    grid[head_loc[0]][head_loc[1] - 1] = 3
                     head_loc[1] -= 1
                     tail_dir.insert(0, 'left')
                     move_clock = 0
@@ -144,7 +144,7 @@ while not done:
                 else:
                     done = True
             else:
-                grid[head_loc[0]][head_loc[1] - 1] = 1
+                grid[head_loc[0]][head_loc[1] - 1] = 3
                 move_tail()
                 tail_dir.insert(0, 'left')
                 head_loc[1] -= 1
@@ -152,7 +152,7 @@ while not done:
         elif(head_dir == 'down'):
             if grid[head_loc[0] + 1][head_loc[1]] != 0:
                 if grid[head_loc[0] + 1][head_loc[1]] == 2:
-                    grid[head_loc[0] + 1][head_loc[1]] = 1
+                    grid[head_loc[0] + 1][head_loc[1]] = 3
                     head_loc[0] += 1
                     tail_dir.insert(0, 'down')
                     move_clock = 0
@@ -162,7 +162,7 @@ while not done:
                 else:
                     done = True
             else:
-                grid[head_loc[0] + 1][head_loc[1]] = 1
+                grid[head_loc[0] + 1][head_loc[1]] = 3
                 move_tail()
                 tail_dir.insert(0, 'down')
                 head_loc[0] += 1
@@ -170,7 +170,7 @@ while not done:
         elif(head_dir == 'right'):
             if grid[head_loc[0]][head_loc[1] + 1] != 0:
                 if grid[head_loc[0]][head_loc[1] + 1] == 2:
-                    grid[head_loc[0]][head_loc[1] + 1] = 1
+                    grid[head_loc[0]][head_loc[1] + 1] = 3
                     head_loc[1] += 1
                     tail_dir.insert(0, 'right')
                     move_clock = 0
@@ -180,7 +180,7 @@ while not done:
                 else:
                     done = True
             else:
-                grid[head_loc[0]][head_loc[1] + 1] = 1
+                grid[head_loc[0]][head_loc[1] + 1] = 3
                 head_dir = 'right'
                 move_tail()
                 tail_dir.insert(0, 'right')
@@ -189,7 +189,7 @@ while not done:
         elif(head_dir == 'up'):
             if grid[head_loc[0] - 1][head_loc[1]] != 0:
                 if grid[head_loc[0] - 1][head_loc[1]] == 2:
-                    grid[head_loc[0] - 1][head_loc[1]] = 1
+                    grid[head_loc[0] - 1][head_loc[1]] = 3
                     head_loc[0] -= 1
                     tail_dir.insert(0, 'up')
                     move_clock = 0
@@ -199,7 +199,7 @@ while not done:
                 else:
                     done = True
             else:
-                grid[head_loc[0] - 1][head_loc[1]] = 1
+                grid[head_loc[0] - 1][head_loc[1]] = 3
                 head_dir = 'up'
                 move_tail()
                 tail_dir.insert(0, 'up')
@@ -214,9 +214,11 @@ while not done:
     for row in range(GRID_SIZE):
         for column in range(GRID_SIZE):
             if grid[row][column] == 1:
-                color = BLACK
+                color = GREY
             elif grid[row][column] == 2:
                 color = GREEN
+            elif grid[row][column] == 3:
+                color = BLACK
             else:
                 color = WHITE
             pygame.draw.rect(screen,
