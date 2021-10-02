@@ -23,7 +23,7 @@ head_dir = ''
 tail_loc = [head_loc[0] + 4, head_loc[1]]
 tail_dir = ['up', 'up', 'up', 'up']
 
-speed = 150  # Snake move speed. Lower number is quicker
+speed = 100  # Snake move speed. Lower number is quicker
 move_clock = 0  # Used to move snake at certain speed
 
 move_queue = '' # This being used to queue the next move
@@ -80,9 +80,9 @@ def move_tail():
 
 def increase_speed():
     global speed
-    if speed > 100:
+    if speed > 60:
         speed -= 4
-    elif speed > 50:
+    elif speed > 30:
         speed -= 2
     else:
         speed -= 1
