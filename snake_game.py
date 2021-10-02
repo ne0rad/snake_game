@@ -23,7 +23,7 @@ head_dir = ''
 tail_loc = [head_loc[0] + 4, head_loc[1]]
 tail_dir = ['up', 'up', 'up', 'up']
 
-speed = 100  # Snake move speed. Lower number is quicker
+speed = 80  # Snake move speed. Lower number is quicker
 move_clock = 0  # Used to move snake at certain speed
 
 move_queue = '' # This being used to queue the next move
@@ -80,12 +80,10 @@ def move_tail():
 
 def increase_speed():
     global speed
-    if speed > 60:
-        speed -= 4
-    elif speed > 30:
-        speed -= 2
-    else:
+    if speed > 5:
         speed -= 1
+    else:
+        speed = 5
     return
 
 def generate_food():
@@ -220,9 +218,10 @@ while not done:
             elif grid[row][column] == 2:
                 color = GREEN
             elif grid[row][column] == 3:
-                if speed < 20:
-                    rand_colors = [BLUE, GREEN, RED]
-                    color = rand_colors[random.randint(0,2)]
+                if speed <= 10:
+                    color = RED
+                elif speed < 30:
+                    color = BLUE
                 else:
                     color = BLACK
             else:
@@ -234,8 +233,8 @@ while not done:
                               SQUARE_SIZE,
                               SQUARE_SIZE])
 
-    # Limit to 60 frames per second
-    clock.tick(60)
+    # Limit to 30 frames per second
+    clock.tick(30)
 
     # Update the screen with what we've drawn.
     pygame.display.flip()
