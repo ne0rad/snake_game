@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -22,7 +23,7 @@ head_dir = ''
 tail_loc = [head_loc[0] + 6, head_loc[1]]
 tail_dir = ['up', 'up', 'up', 'up', 'up', 'up']
 
-speed = 15  # Snake move speed. Lower number is quicker
+speed = 150  # Snake move speed. Lower number is quicker
 move_clock = 0  # Used to move snake at certain speed
 
 # Create a 2 dimensional array for our playing grid
@@ -61,12 +62,6 @@ grid[head_loc[0]+4][head_loc[1]] = 1
 grid[head_loc[0]+5][head_loc[1]] = 1
 grid[tail_loc[0]][tail_loc[1]] = 1
 
-# FOOD SQUARE FOR TESTING
-grid[20][25] = 2
-grid[22][25] = 2
-grid[26][25] = 2
-grid[20][12] = 2
-
 
 def move_tail():
 
@@ -82,6 +77,29 @@ def move_tail():
     tail_dir.pop()
     return
 
+
+def increase_speed():
+    global speed
+    if speed > 100:
+        speed -= 4
+    elif speed > 50:
+        speed -= 2
+    else:
+        speed -= 1
+    return
+
+def generate_food():
+    # Generates food in a random place on the grid
+    x = random.randint(1, GRID_SIZE - 1)
+    y = random.randint(1, GRID_SIZE - 1)
+    if grid[x][y] == 0:
+        grid[x][y] = 2
+    else:
+        generate_food()
+        return
+    return
+
+generate_food() # Generates first food item
 
 # -------- Main Program Loop -----------
 while not done:
@@ -109,16 +127,20 @@ while not done:
                     head_dir = 'left'
                     move_clock = speed
 
-    if move_clock < speed:
+    # Checks if it's time to move the snake
+    # Depending on speed
+    if move_clock < speed / 10:
         move_clock += 1
     else:
         if(head_dir == 'left'):
-            if grid[head_loc[0]][head_loc[1] - 1] != 0:
-                if grid[head_loc[0]][head_loc[1] - 1] == 2:
+            if grid[head_loc[0]][head_loc[1] - 1] != 0: # Checks for collision
+                if grid[head_loc[0]][head_loc[1] - 1] == 2: # if collision is food makes snake bigger
+                    grid[head_loc[0]][head_loc[1] - 1] = 1
                     head_loc[1] -= 1
                     tail_dir.insert(0, 'left')
-                    print("food?")
                     move_clock = 0
+                    increase_speed()
+                    generate_food()
                     continue
                 else:
                     done = True
@@ -131,10 +153,12 @@ while not done:
         elif(head_dir == 'down'):
             if grid[head_loc[0] + 1][head_loc[1]] != 0:
                 if grid[head_loc[0] + 1][head_loc[1]] == 2:
+                    grid[head_loc[0] + 1][head_loc[1]] = 1
                     head_loc[0] += 1
                     tail_dir.insert(0, 'down')
-                    print("food?")
                     move_clock = 0
+                    increase_speed()
+                    generate_food()
                     continue
                 else:
                     done = True
@@ -147,10 +171,12 @@ while not done:
         elif(head_dir == 'right'):
             if grid[head_loc[0]][head_loc[1] + 1] != 0:
                 if grid[head_loc[0]][head_loc[1] + 1] == 2:
+                    grid[head_loc[0]][head_loc[1] + 1] = 1
                     head_loc[1] += 1
                     tail_dir.insert(0, 'right')
-                    print("food?")
                     move_clock = 0
+                    increase_speed()
+                    generate_food()
                     continue
                 else:
                     done = True
@@ -164,10 +190,12 @@ while not done:
         elif(head_dir == 'up'):
             if grid[head_loc[0] - 1][head_loc[1]] != 0:
                 if grid[head_loc[0] - 1][head_loc[1]] == 2:
+                    grid[head_loc[0] - 1][head_loc[1]] = 1
                     head_loc[0] -= 1
                     tail_dir.insert(0, 'up')
-                    print("food?")
                     move_clock = 0
+                    increase_speed()
+                    generate_food()
                     continue
                 else:
                     done = True
@@ -186,8 +214,10 @@ while not done:
     # Draw the grid
     for row in range(GRID_SIZE):
         for column in range(GRID_SIZE):
-            if grid[row][column] == 1 or grid[row][column] == 2:
+            if grid[row][column] == 1:
                 color = BLACK
+            elif grid[row][column] == 2:
+                color = GREEN
             else:
                 color = WHITE
             pygame.draw.rect(screen,
