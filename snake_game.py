@@ -102,10 +102,10 @@ def move_tail():
 def increase_speed():
     # Increases snakes speed
     global speed
-    if speed > 5:
+    if speed > 4:
         speed -= 1
     else:
-        speed = 5
+        speed = 4
     return
 
 def generate_food():
@@ -114,11 +114,10 @@ def generate_food():
     y = random.randint(1, GRID_SIZE - 1)
     if grid[x][y] == 0:
         grid[x][y] = 2
+        return
     else:
         generate_food()
         return
-    return
-
 
 
 generate_food() # Generates first food item
@@ -222,7 +221,7 @@ while not done:
             elif grid[row][column] == 2:
                 color = GREEN
             elif grid[row][column] == 3:
-                if speed <= 10:
+                if speed == 4:
                     color = RED
                 elif speed < 30:
                     color = BLUE
