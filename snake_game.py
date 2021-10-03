@@ -64,6 +64,7 @@ grid[tail_loc[0]][tail_loc[1]] = 3
 
 
 def move_head(direction):
+    # Move snake's head
     global move_clock
     if direction == 'left':
         grid[head_loc[0]][head_loc[1] - 1] = 3
@@ -83,7 +84,8 @@ def move_head(direction):
     return
 
 def move_tail():
-
+    # Remove last element of snake's tail when moving
+    # Set new location for snakes tail
     grid[tail_loc[0]][tail_loc[1]] = 0
     if tail_dir[-1] == 'up':
         tail_loc[0] -= 1
@@ -98,6 +100,7 @@ def move_tail():
 
 
 def increase_speed():
+    # Increases snakes speed
     global speed
     if speed > 5:
         speed -= 1
@@ -154,7 +157,9 @@ while not done:
             head_dir = move_queue
         if(head_dir == 'left'):
             if grid[head_loc[0]][head_loc[1] - 1] != 0: # Checks for collision
-                if grid[head_loc[0]][head_loc[1] - 1] == 2: # if collision is food makes snake bigger
+                if grid[head_loc[0]][head_loc[1] - 1] == 2: 
+                    # if collision is food makes snake bigger
+                    # and increases it's speed
                     move_head('left')
                     increase_speed()
                     generate_food()
