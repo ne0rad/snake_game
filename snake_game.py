@@ -63,6 +63,25 @@ grid[head_loc[0]+3][head_loc[1]] = 3
 grid[tail_loc[0]][tail_loc[1]] = 3
 
 
+def move_head(direction):
+    global move_clock
+    if direction == 'left':
+        grid[head_loc[0]][head_loc[1] - 1] = 3
+        head_loc[1] -= 1
+    elif direction == 'right':
+        grid[head_loc[0]][head_loc[1] + 1] = 3
+        head_loc[1] += 1
+    elif direction == 'up':
+        grid[head_loc[0] - 1][head_loc[1]] = 3
+        head_loc[0] -= 1
+    elif direction == 'down':
+        grid[head_loc[0] + 1][head_loc[1]] = 3
+        head_loc[0] += 1
+
+    tail_dir.insert(0, direction)
+    move_clock = 0
+    return
+
 def move_tail():
 
     grid[tail_loc[0]][tail_loc[1]] = 0
@@ -96,6 +115,8 @@ def generate_food():
         generate_food()
         return
     return
+
+
 
 generate_food() # Generates first food item
 generate_food() 
@@ -134,78 +155,56 @@ while not done:
         if(head_dir == 'left'):
             if grid[head_loc[0]][head_loc[1] - 1] != 0: # Checks for collision
                 if grid[head_loc[0]][head_loc[1] - 1] == 2: # if collision is food makes snake bigger
-                    grid[head_loc[0]][head_loc[1] - 1] = 3
-                    head_loc[1] -= 1
-                    tail_dir.insert(0, 'left')
-                    move_clock = 0
+                    move_head('left')
                     increase_speed()
                     generate_food()
                     continue
                 else:
                     done = True
             else:
-                grid[head_loc[0]][head_loc[1] - 1] = 3
+                move_head('left')
                 move_tail()
-                tail_dir.insert(0, 'left')
-                head_loc[1] -= 1
 
         elif(head_dir == 'down'):
             if grid[head_loc[0] + 1][head_loc[1]] != 0:
                 if grid[head_loc[0] + 1][head_loc[1]] == 2:
-                    grid[head_loc[0] + 1][head_loc[1]] = 3
-                    head_loc[0] += 1
-                    tail_dir.insert(0, 'down')
-                    move_clock = 0
+                    move_head('down')
                     increase_speed()
                     generate_food()
                     continue
                 else:
                     done = True
             else:
-                grid[head_loc[0] + 1][head_loc[1]] = 3
+                move_head('down')
                 move_tail()
-                tail_dir.insert(0, 'down')
-                head_loc[0] += 1
+
 
         elif(head_dir == 'right'):
             if grid[head_loc[0]][head_loc[1] + 1] != 0:
                 if grid[head_loc[0]][head_loc[1] + 1] == 2:
-                    grid[head_loc[0]][head_loc[1] + 1] = 3
-                    head_loc[1] += 1
-                    tail_dir.insert(0, 'right')
-                    move_clock = 0
+                    move_head('right')
                     increase_speed()
                     generate_food()
                     continue
                 else:
                     done = True
             else:
-                grid[head_loc[0]][head_loc[1] + 1] = 3
-                head_dir = 'right'
+                move_head('right')
                 move_tail()
-                tail_dir.insert(0, 'right')
-                head_loc[1] += 1
 
         elif(head_dir == 'up'):
             if grid[head_loc[0] - 1][head_loc[1]] != 0:
                 if grid[head_loc[0] - 1][head_loc[1]] == 2:
-                    grid[head_loc[0] - 1][head_loc[1]] = 3
-                    head_loc[0] -= 1
-                    tail_dir.insert(0, 'up')
-                    move_clock = 0
+                    move_head('up')
                     increase_speed()
                     generate_food()
                     continue
                 else:
                     done = True
             else:
-                grid[head_loc[0] - 1][head_loc[1]] = 3
-                head_dir = 'up'
+                move_head('up')
                 move_tail()
-                tail_dir.insert(0, 'up')
-                head_loc[0] -= 1
 
-        move_clock = 0  # Reset move clock / snake speed
 
     # Set the screen background
     screen.fill(WHITE)
