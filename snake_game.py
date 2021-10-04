@@ -208,7 +208,7 @@ while not done:
                               SQUARE_SIZE])
 
     # Limit to 30 frames per second
-    clock.tick(30)
+    clock.tick(60)
 
     # Update the screen with what we've drawn.
     pygame.display.flip()
