@@ -207,7 +207,7 @@ while not done:
                               SQUARE_SIZE,
                               SQUARE_SIZE])
 
-    # Limit to 30 frames per second
+    # Limit to 60 frames per second
     clock.tick(60)
 
     # Update the screen with what we've drawn.
