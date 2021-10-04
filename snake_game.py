@@ -119,6 +119,30 @@ def generate_food():
         generate_food()
         return
 
+def check_next_move(direction):
+    next_move = 0
+    if direction == 'left':
+        next_move = grid[head_loc[0]][head_loc[1] - 1]
+    elif direction == 'right':
+        next_move = grid[head_loc[0]][head_loc[1] + 1]
+    elif direction == 'up':
+        next_move = grid[head_loc[0] - 1][head_loc[1]]
+    elif direction == 'down':
+        next_move = grid[head_loc[0] + 1][head_loc[1]]
+    
+    if next_move == 0: # No collision, move normally
+        move_head(direction)
+        move_tail()
+    elif next_move == 2: # Collision is food, extend snake
+        move_head(direction)
+        increase_speed()
+        generate_food()
+    elif next_move == 1: # Collision detected, terminate
+        global done 
+        done = True
+
+    return
+
 
 generate_food() # Generates first food item
 generate_food() 
@@ -152,63 +176,10 @@ while not done:
         move_clock += 1
     else:
         if move_queue != head_dir:
-            # Make queued move the new direction
-            head_dir = move_queue
-        if(head_dir == 'left'):
-            if grid[head_loc[0]][head_loc[1] - 1] != 0: # Checks for collision
-                if grid[head_loc[0]][head_loc[1] - 1] == 2: 
-                    # if collision is food makes snake bigger
-                    # and increases it's speed
-                    move_head('left')
-                    increase_speed()
-                    generate_food()
-                    continue
-                else:
-                    done = True
-            else:
-                move_head('left')
-                move_tail()
-
-        elif(head_dir == 'down'):
-            if grid[head_loc[0] + 1][head_loc[1]] != 0:
-                if grid[head_loc[0] + 1][head_loc[1]] == 2:
-                    move_head('down')
-                    increase_speed()
-                    generate_food()
-                    continue
-                else:
-                    done = True
-            else:
-                move_head('down')
-                move_tail()
-
-
-        elif(head_dir == 'right'):
-            if grid[head_loc[0]][head_loc[1] + 1] != 0:
-                if grid[head_loc[0]][head_loc[1] + 1] == 2:
-                    move_head('right')
-                    increase_speed()
-                    generate_food()
-                    continue
-                else:
-                    done = True
-            else:
-                move_head('right')
-                move_tail()
-
-        elif(head_dir == 'up'):
-            if grid[head_loc[0] - 1][head_loc[1]] != 0:
-                if grid[head_loc[0] - 1][head_loc[1]] == 2:
-                    move_head('up')
-                    increase_speed()
-                    generate_food()
-                    continue
-                else:
-                    done = True
-            else:
-                move_head('up')
-                move_tail()
-
+            head_dir = move_queue # Set queued move the new direction
+        
+        if head_dir != '': # Only start moving if user pressed direction button
+            check_next_move(head_dir) # Make the next move
 
     # Set the screen background
     screen.fill(WHITE)
