@@ -137,7 +137,7 @@ def check_next_move(direction):
         move_head(direction)
         increase_speed()
         generate_food()
-    elif next_move == 1: # Collision detected, terminate
+    else:  # Collision detected, terminate
         global done 
         done = True
 
