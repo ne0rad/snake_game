@@ -6,10 +6,15 @@ A simple snake game made with pyGame.
 
 ## Installation
 
-You need to install pyGame library to run the game
+You need to install pyGame library to run this game
 
 ```bash
-  pip3 install pyGame
+  pip3 install pygame
+```
+
+or 
+```bash
+  pip install pygame
 ```
 
 ## Screenshots:
